@@ -8,16 +8,21 @@ const Customer = require('./models/customer.js')
 const connect = async () => {
     await mongoose.connect(process.env.MONGODB_URI);
     console.log('Connected to MongoDB');
+    let userInput;
+    
+    do {
+        userInput = menu();
+        if(userInput === '1') await createCustomer();
+        else if(userInput === '2') await viewAllCustomers();
+        else if(userInput === '3') await updateCustomer();
+        else if(userInput === '4') await deleteCustomer();
+    } while (userInput !== '5');
 
-    const userInput = menu();
-    if(userInput === '1') await createCustomer();
-    else if(userInput === '2') await viewAllCustomers();
-    else if(userInput === '3') await updateCustomer();
-    else if(userInput === '4') await deleteCustomer();
-    else await mongoose.connection.close();
 
-    console.log('Disconnected from MongoDB');
-    process.exit();
+        await mongoose.connection.close();
+        console.log('Disconnected from MongoDB');
+        process.exit();
+   
 };
 
 const menu = () => {
